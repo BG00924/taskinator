@@ -12,13 +12,19 @@ var tasksToDoEl = document.querySelector("#tasks-to-do");
     //tasksToDoEl.appendChild(listItemEl);
 //})
 
-var taskFormHandler = function() {
+var taskFormHandler = function(event) {
     // prevents automatic refresh of the page
     event.preventDefault();
     // var for task input field speifically selecting and storing value
     var taskNameInput = document.querySelector("input[name='task-name']").value;
     // variable declaration for drop down menu input
     var taskTypeInput = document.querySelector("select[name='task-type']").value;
+    // stops function if fields are empty strings
+    if (!taskNameInput || !taskTypeInput) {
+        alert("You need to fill out the task form!");
+        return false;
+    };
+    formEl.reset();
     // package up data as an object
     var taskDataObj = {
         name: taskNameInput,
@@ -37,7 +43,7 @@ var createTaskEl = function(taskDataObj) {
     // gives the div a class name
     taskInfoEl.className = "task-info";
     // adds html content to div
-    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObject.name + "</h3><span class='task-type'>" + taskDataObject.type + "</span>";
+    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
     // add text inside the lo
     // listItemEl.textContent = "This is a new task.";
     // adjusted from about to pull the var taskNameInput which selected and stored the value input into the field
