@@ -86,8 +86,10 @@ var createTaskEl = function(taskDataObj) {
     tasks.push(taskDataObj);
     // increases task counter for next unique id
     taskIdCounter++;
-    console.log(taskDataObj);
-    console.log(taskDataObj.status);
+    //console.log(taskDataObj);
+    //console.log(taskDataObj.status);
+    //this causes all the data made in this function be saved
+    saveTasks();
 };
 // function to dynamically create the buttons for each task
 var createTaskActions = function(taskId) {
@@ -172,6 +174,9 @@ var deleteTask = function(taskId) {
     }
     // reassign tasks array to be the same as updatedTaskArr
     tasks = updatedTaskArr;
+
+    //this causes all the data made in this function be saved
+    saveTasks();
 };
 
 var editTask = function(taskId) {
@@ -213,6 +218,9 @@ var completeEditTask = function(taskName, taskType, taskId) {
     //returns button to normal
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
+
+    //this causes all the data made in this function be saved
+    saveTasks();
 }
 
 var taskStatusChangeHandler = function(event) {
@@ -242,6 +250,9 @@ var taskStatusChangeHandler = function(event) {
             tasks[i].status = statusValue;
         }
     }
+
+    //this causes all the data made in this function be saved
+    saveTasks();
 };
 
 var dragTaskHandler = function(event) {
@@ -306,6 +317,9 @@ var dropTaskHandler = function(event) {
     }
     dropZoneEl.removeAttribute("style");
     dropZoneEl.appendChild(draggableElement);
+
+    //this causes all the data made in this function be saved
+    saveTasks();
 }
 
 var dragLeaveHandler = function(event) {
@@ -313,6 +327,11 @@ var dragLeaveHandler = function(event) {
     if (taskListEl) {
         taskListEl.removeAttribute("style");
     }
+}
+
+// the JSON allows it to save non-string data appropriately
+var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 // event listener for button
