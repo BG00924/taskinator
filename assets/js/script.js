@@ -234,6 +234,8 @@ var dropZoneDragHandler = function(even) {
         event.preventDefault();
         // used to verify working
         //console.dir(taskListEl);
+        //changes the style on dragover
+        taskListEl.setAttribute("style", "background: rgba(68, 233, 255, 0.7); border-style: dashed;");
 
     }
 };
@@ -261,7 +263,15 @@ var dropTaskHandler = function(event) {
     else if (statusType === "tasks-completed") {
         statusSelectEl.selectedIndex = 2;
     }
+    dropZoneEl.removeAttribute("style");
     dropZoneEl.appendChild(draggableElement);
+}
+
+var dragLeaveHandler = function(event) {
+    var taskListEl = event.target.closest(".task-list");
+    if (taskListEl) {
+        taskListEl.removeAttribute("style");
+    }
 }
 
 // event listener for button
@@ -280,5 +290,8 @@ pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 
 // event listener for the drop
 pageContentEl.addEventListener("drop", dropTaskHandler);
+
+// event listener for when you leave a drop event
+pageContentEl.addEventListener("dragleave", dragLeaveHandler);
 
 
