@@ -334,6 +334,60 @@ var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+// loads saved data
+var loadTasks = function() {
+    // gets tasks items from localStorage
+    tasks = localStorage.getItem("tasks"); 
+    //console.log(tasks);
+    
+    if(tasks === null) {
+        var tasks = [];
+        return false;
+    }
+    //converts tasks from the stringified format back into an array of objects
+    tasks = JSON.parse(tasks);
+    //console.log(tasks);
+    //iterates through tasks array and creates task elements on the page from it
+    for (var i = 0; i < tasks.length; i++) {
+        //console.log(tasks[i])
+        tasks.id=taskIdCounter;
+        //console.log(tasks[i]);
+        var listItemEl = document.createElement("li");
+        listItemEl.className = "task-item"; //applies the task-item class to each created li
+        // adds task id as a custom attribute
+        listItemEl.setAttribute("data-task-id", tasks[i].id);
+        // adds draggable attribute
+        listItemEl.setAttribute("draggable", "true");
+        //console.log(listItemEl)
+        //creat div to hold task info and add to list item
+        var taskInfoEl = document.createElement("div");
+        // gives the div a class name
+        taskInfoEl.className = "task-info";
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+        // adds content to the div inside of the li and appends it to the li
+        listItemEl.appendChild(taskInfoEl);
+        //creates buttons that correspond to current task
+        var taskActionsEl = createTaskActions(tasks[i].id);
+        // appends buttons to listItemEl before appended to page
+        listItemEl.appendChild(taskActionsEl);
+        //console.log(listItemEl);
+        if (tasks[i].status === "to do") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+            tasksToDoEl.appendChild(listItemEl);
+        }
+        else if (tasks[i].status === "in progress") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
+            tasksInProgressEl.appendChild(listItemEl);
+        }
+        else if (tasks[i].status === "complete") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+            tasksCompletedEl.appendChild(listItemEl);
+        }
+        //console.log(listItemEl);
+    }
+    
+}
+
 // event listener for button
 pageContentEl.addEventListener("click", taskButtonHandler);
 
@@ -354,4 +408,5 @@ pageContentEl.addEventListener("drop", dropTaskHandler);
 // event listener for when you leave a drop event
 pageContentEl.addEventListener("dragleave", dragLeaveHandler);
 
+loadTasks();
 
